@@ -6,6 +6,7 @@ import { Project } from './pages/Project';
 import { IntentEditor } from './pages/IntentEditor';
 import { ComparisonView } from './pages/ComparisonView';
 import { Settings } from './pages/Settings';
+import { OfflineIndicator } from './components/OfflineIndicator';
 import { useAuthStore } from './stores/authStore';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -31,6 +32,7 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <BrowserRouter>
+      <OfflineIndicator />
       <Routes>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
