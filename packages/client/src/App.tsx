@@ -4,6 +4,7 @@ import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
 import { Project } from './pages/Project';
 import { IntentEditor } from './pages/IntentEditor';
+import { ComparisonView } from './pages/ComparisonView';
 import { useAuthStore } from './stores/authStore';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -73,6 +74,15 @@ function App() {
           element={
             <ProtectedRoute>
               <IntentEditor />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/compare/:intentId"
+          element={
+            <ProtectedRoute>
+              <ComparisonView />
             </ProtectedRoute>
           }
         />
