@@ -59,6 +59,8 @@ export const intentsApi = {
 // API Keys API
 export const keysApi = {
   list: () => api.get('/keys'),
+  create: (provider: string, encryptedKey: string, iv: string) =>
+    api.post('/keys', { provider, encryptedKey, iv }),
   add: (provider: string, encryptedKey: string, iv: string) =>
     api.post('/keys', { provider, encryptedKey, iv }),
   delete: (provider: string) => api.delete(`/keys/${provider}`),
@@ -67,6 +69,11 @@ export const keysApi = {
 // Models API
 export const modelsApi = {
   list: () => api.get('/models'),
+  create: (provider: string, modelName: string, temperature: number, maxTokens: number) =>
+    api.post('/models', { provider, modelName, temperature, maxTokens }),
+  update: (id: string, modelName: string, temperature: number, maxTokens: number) =>
+    api.put(`/models/${id}`, { modelName, temperature, maxTokens }),
+  delete: (id: string) => api.delete(`/models/${id}`),
 };
 
 // Executions API
