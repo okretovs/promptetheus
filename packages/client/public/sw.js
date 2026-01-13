@@ -102,19 +102,3 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
-
-// Handle background sync for offline operations
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-operations') {
-    event.waitUntil(syncOperations());
-  }
-});
-
-async function syncOperations() {
-  // This would sync with the main app's IndexedDB queue
-  // For now, just notify clients that sync is needed
-  const clients = await self.clients.matchAll();
-  clients.forEach((client) => {
-    client.postMessage({ type: 'SYNC_NEEDED' });
-  });
-}

@@ -50,6 +50,7 @@ export const forgedPrompts = sqliteTable('forged_prompts', {
   intentId: text('intent_id').references(() => intents.id, { onDelete: 'cascade' }).notNull(),
   provider: text('provider').notNull(),
   modelName: text('model_name').notNull(),
+  version: integer('version').default(1).notNull(),
   promptText: text('prompt_text').notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
 });
@@ -141,6 +142,7 @@ function createTables(sqlite: Database.Database) {
       intent_id TEXT NOT NULL REFERENCES intents(id) ON DELETE CASCADE,
       provider TEXT NOT NULL,
       model_name TEXT NOT NULL,
+      version INTEGER NOT NULL DEFAULT 1,
       prompt_text TEXT NOT NULL,
       created_at INTEGER NOT NULL
     );
