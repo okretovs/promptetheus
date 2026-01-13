@@ -109,24 +109,39 @@ export function IntentEditor() {
     }
 
     try {
-      // Validate sample input before proceeding
+      // Parse and validate sample input
+      let input;
       try {
-        if (sampleInputText.trim()) {
-          JSON.parse(sampleInputText); // Just validate, will use value in Sprint 7
-        }
+        input = sampleInputText.trim() ? JSON.parse(sampleInputText) : {};
       } catch {
         alert('Invalid JSON in sample input. Please fix before executing.');
         return;
       }
 
-      // First save and forge
-      await handleForge();
+      // Parse and validate schema
+      let schema;
+      try {
+        schema = JSON.parse(schemaText);
+      } catch {
+        alert('Invalid JSON in schema. Please fix before executing.');
+        return;
+      }
 
-      // Then execute (navigate to comparison page)
-      // This will be fully implemented in Sprint 7
-      alert('Execute functionality will be completed in Sprint 7');
+      // First save the current state
+      await updateIntent(currentIntent.id, name, schema, input);
+
+      // Execute the prompts
+      await intentsApi.execute(
+        currentIntent.id,
+        selectedProviders,
+        input
+      );
+
+      // Navigate to comparison view to see results
+      navigate(`/compare/${currentIntent.id}`);
     } catch (error) {
       console.error('Failed to execute:', error);
+      alert('Failed to execute prompts. Please try again.');
     }
   };
 
