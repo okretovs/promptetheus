@@ -1,4 +1,4 @@
-#Promptetheus
+# Promptetheus
 Forge fire into every prompt
 
 ## Overview
