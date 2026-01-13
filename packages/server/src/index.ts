@@ -3,6 +3,11 @@ import cors from '@fastify/cors';
 import jwt from '@fastify/jwt';
 import { initDb } from './db/schema.js';
 import { authRoutes } from './routes/auth.js';
+import { projectRoutes } from './routes/projects.js';
+import { intentRoutes } from './routes/intents.js';
+import { keyRoutes } from './routes/keys.js';
+import { modelRoutes } from './routes/models.js';
+import { executionRoutes } from './routes/executions.js';
 
 const app = Fastify({
   logger: {
@@ -30,6 +35,11 @@ async function start() {
 
     // Register routes
     await app.register(authRoutes, { prefix: '/api/auth' });
+    await app.register(projectRoutes, { prefix: '/api/projects' });
+    await app.register(intentRoutes, { prefix: '/api/intents' });
+    await app.register(keyRoutes, { prefix: '/api/keys' });
+    await app.register(modelRoutes, { prefix: '/api/models' });
+    await app.register(executionRoutes, { prefix: '/api/executions' });
 
     // Health check endpoint
     app.get('/api/health', async () => {
