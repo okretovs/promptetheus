@@ -50,6 +50,9 @@ export const forgedPrompts = sqliteTable('forged_prompts', {
   intentId: text('intent_id').references(() => intents.id, { onDelete: 'cascade' }).notNull(),
   provider: text('provider').notNull(),
   modelName: text('model_name').notNull(),
+  // Version field tracks the intent schema version used to generate this prompt
+  // Allows execution history to reference which version of the intent was used
+  // Default: 1 (matches intent.version on creation)
   version: integer('version').default(1).notNull(),
   promptText: text('prompt_text').notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
@@ -142,6 +145,7 @@ function createTables(sqlite: Database.Database) {
       intent_id TEXT NOT NULL REFERENCES intents(id) ON DELETE CASCADE,
       provider TEXT NOT NULL,
       model_name TEXT NOT NULL,
+      -- Version tracks the intent schema version at prompt generation time
       version INTEGER NOT NULL DEFAULT 1,
       prompt_text TEXT NOT NULL,
       created_at INTEGER NOT NULL

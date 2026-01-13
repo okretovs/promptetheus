@@ -6,7 +6,15 @@ import { eq, and } from 'drizzle-orm';
 import { forgePrompts } from '../services/forger.js';
 import { getAdapter } from '../services/adapters/index.js';
 
-// Helper function to verify project ownership
+/**
+ * Verifies that the specified project belongs to the authenticated user.
+ * Used to prevent unauthorized access to intents through project ownership.
+ *
+ * @param projectId - The project ID to verify
+ * @param userId - The authenticated user's ID from JWT
+ * @param db - Database instance
+ * @returns true if user owns the project, false otherwise
+ */
 async function verifyProjectOwnership(
   projectId: string,
   userId: string,
@@ -20,7 +28,15 @@ async function verifyProjectOwnership(
   return !!project;
 }
 
-// Helper function to verify intent ownership via project
+/**
+ * Verifies that the specified intent's project belongs to the authenticated user.
+ * Performs authorization check by traversing intent -> project -> user relationship.
+ *
+ * @param intentId - The intent ID to verify
+ * @param userId - The authenticated user's ID from JWT
+ * @param db - Database instance
+ * @returns true if user owns the intent's project, false otherwise
+ */
 async function verifyIntentOwnership(
   intentId: string,
   userId: string,
@@ -76,7 +92,8 @@ export async function intentRoutes(fastify: FastifyInstance) {
     const userId = request.userId!;
     const db = getDb();
 
-    // Verify project ownership
+    // SECURITY: Verify user owns the project before creating intent
+    // Prevents users from creating intents in other users' projects
     const hasAccess = await verifyProjectOwnership(projectId, userId, db);
     if (!hasAccess) {
       return reply.code(403).send({ error: 'Forbidden' });
@@ -176,6 +193,8 @@ export async function intentRoutes(fastify: FastifyInstance) {
         intentId: id,
         provider: fp.provider,
         modelName: fp.modelName,
+        // Capture the intent's current version so execution history
+        // can track which schema version generated this prompt
         version: intent[0].version,
         promptText: fp.promptText,
         createdAt: new Date(),
@@ -215,6 +234,8 @@ export async function intentRoutes(fastify: FastifyInstance) {
         intentId: id,
         provider: fp.provider,
         modelName: fp.modelName,
+        // Capture the intent's current version so execution history
+        // can track which schema version generated this prompt
         version: intent[0].version,
         promptText: fp.promptText,
         createdAt: new Date(),
