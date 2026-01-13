@@ -47,9 +47,17 @@ export function Dashboard() {
       <header className="bg-dark-800 border-b border-dark-700">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-primary-500">Promptetheus</h1>
-          <button onClick={handleLogout} className="btn-secondary">
-            Logout
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => navigate('/settings')}
+              className="btn-secondary"
+            >
+              Settings
+            </button>
+            <button onClick={handleLogout} className="btn-secondary">
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 
